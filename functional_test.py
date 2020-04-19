@@ -1,6 +1,7 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import unittest
+from selenium.webdriver.common.keys import Keys
 
 class NewVisitorTest(unittest.TestCase):
     def setUp(self):
@@ -17,17 +18,27 @@ class NewVisitorTest(unittest.TestCase):
 
         # 웹 페이지 타이틀과 헤더가 'To-Do'라고 쓰였다
         self.assertIn('To-Do', self.browser.title)
-        self.fail('Finish the test.')
+        header_text = self.browser.find_element_by_tag_name('h1').text
+        self.assertIn('To-Do', header_text)
 
         # 작업 하나를 등록한다
+        inputbox = self.browser.find_elements_by_id('id_new_item')
+        self.assertEqual(inputbox.get_attribute('placeholder'), '작업 아이템 입력')
 
         # 텍스트 박스에 "밥 먹기"라고 쓴다
+        inputbox.send_keys('밥 먹기')
 
         # 엔터 키를 누르면 페이지가 새로 바뀌고
         # "1: 밥 먹기" 항목이 보인다
+        inputbox.send_keys(Keys.ENTER)
+
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertTrue(any(row.text == '1: 밥 먹기' for row in rows))
 
         # 항목을 더 쓸 수 있는 여분의 텍스트 박스가 있다
         # 그곳에 "씻기"라고 쓴다
+        self.fail('Finish the test.')
 
         # 페이지가 새로 바뀌고, 두 개의 항목이 보인다
         # 입력한 내용이 저장되는지 궁금하다
