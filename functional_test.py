@@ -22,7 +22,7 @@ class NewVisitorTest(unittest.TestCase):
         self.assertIn('To-Do', header_text)
 
         # 작업 하나를 등록한다
-        inputbox = self.browser.find_elements_by_id('id_new_item')
+        inputbox = self.browser.find_element_by_id('id_new_item')
         self.assertEqual(inputbox.get_attribute('placeholder'), '작업 아이템 입력')
 
         # 텍스트 박스에 "밥 먹기"라고 쓴다
@@ -34,7 +34,8 @@ class NewVisitorTest(unittest.TestCase):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: 밥 먹기' for row in rows))
+        self.assertTrue(any(row.text == '1: 밥 먹기' for row in rows),
+        "신규 작업이 테이블에 표시되지 않는다.")
 
         # 항목을 더 쓸 수 있는 여분의 텍스트 박스가 있다
         # 그곳에 "씻기"라고 쓴다
