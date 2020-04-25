@@ -32,11 +32,16 @@ class NewVisitorTest(unittest.TestCase):
         # "1: 밥 먹기" 항목이 보인다
         inputbox.send_keys(Keys.ENTER)
 
+        # 다른 항목을 넣는다
+        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox.send_keys('이빨 닦기')
+        inputbox.send_keys(Keys.ENTER)
+
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertTrue(any(row.text == '1: 밥 먹기' for row in rows),
-        "신규 작업이 테이블에 표시되지 않는다.")
-
+        self.assertIn('1: 밥 먹기', [row.text for row in rows])
+        self.assertIn('2: 이빨 닦기', [row.text for row in rows])
+        
         # 항목을 더 쓸 수 있는 여분의 텍스트 박스가 있다
         # 그곳에 "씻기"라고 쓴다
         self.fail('Finish the test.')
