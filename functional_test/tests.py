@@ -1,9 +1,9 @@
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-import unittest
 from selenium.webdriver.common.keys import Keys
+from django.test import LiveServerTestCase
 
-class NewVisitorTest(unittest.TestCase):
+class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Chrome(ChromeDriverManager().install())        
         self.browser.implicitly_wait(3)
@@ -14,7 +14,7 @@ class NewVisitorTest(unittest.TestCase):
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 새로운 온라인 앱이 나왔다는 소식을 듣고
         # 그 앱을 확인하러 간다
-        self.browser.get('http://localhost:8000')
+        self.browser.get(self.live_server_url)
 
         # 웹 페이지 타이틀과 헤더가 'To-Do'라고 쓰였다
         self.assertIn('To-Do', self.browser.title)
@@ -52,9 +52,6 @@ class NewVisitorTest(unittest.TestCase):
         # 그리고 URL의 설명도 함께 제공한다
 
         # 안내 받은 URL로 접속하면 내가 만든 작업 목록을 볼 수 있다
-
-if __name__ == '__main__':
-    unittest.main(warnings='ignore')   
 
 
 
