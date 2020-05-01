@@ -25,35 +25,7 @@ class HomePageTest(TestCase):
         found = urllib.parse.quote(reverse('home'))
         
         self.assertEqual(found, '/')
-
-    def test_homepage_can_save_a_POST_request(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        home_page(request)
-
-        self.assertEqual(Item.objects.count(), 1)
-        new_item = Item.objects.first()
-        self.assertEqual(new_item.text, 'A new list item')
-
-    def test_home_page_redirects_after_POST(self):
-        request = HttpRequest()
-        request.method = 'POST'
-        request.POST['item_text'] = 'A new list item'
-
-        response = home_page(request)
-
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
-
-    def test_home_page_only_saves_items_when_necessary(self):
-        request = HttpRequest()
-
-        home_page(request)
-
-        self.assertEqual(Item.objects.count(), 0)
-
+    
 class ItemModelTest(TestCase):
     
     def test_saving_and_retrieving_items(self):
@@ -87,3 +59,23 @@ class ListViewTest(TestCase):
 
         self.assertContains(response, 'item 1')
         self.assertContains(response, 'item 2')
+
+class NewListTest(TestCase):
+
+    def test_saving_a_POST_request(self):
+        item_text = '신규 작업 아이템'
+        
+        # trailing slash, 꼬리 /
+        # 사용하지 않는 경우 : DB를 바꾸는 '액션' URL, 파일
+        # 사용하는 경우 : 디렉토리
+        self.client.post('/lists/new', data={'item_text':item_text})
+
+        self.assertEqual(Item.objects.count(), 1)
+        new_item = Item.objects.first()
+        self.assertEqual(new_item.text, item_text)
+
+    def test_redirects_after_POST(self):
+        response = self.client.post('/lists/new', data={'item_text':'신규 작업 아이템'})
+
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response['location'], '/lists/the-only-list-in-the-world/')
