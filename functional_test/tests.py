@@ -6,10 +6,15 @@ from django.test import LiveServerTestCase
 class NewVisitorTest(LiveServerTestCase):
     def setUp(self):
         self.browser = webdriver.Chrome(ChromeDriverManager().install())        
-        self.browser.implicitly_wait(3)
+        #self.browser.implicitly_wait(3)
 
     def tearDown(self):
         self.browser.quit()
+
+    def check_for_row_in_list_table(self, row_text):
+        table = self.browser.find_element_by_id('id_list_table')
+        rows = table.find_elements_by_tag_name('tr')
+        self.assertIn(row_text, [row.text for row in rows])
 
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 새로운 온라인 앱이 나왔다는 소식을 듣고
@@ -19,7 +24,7 @@ class NewVisitorTest(LiveServerTestCase):
         # 웹 페이지 타이틀과 헤더가 'To-Do'라고 쓰였다
         self.assertIn('To-Do', self.browser.title)
         header_text = self.browser.find_element_by_tag_name('h1').text
-        self.assertIn('To-Do', header_text)
+        self.assertIn('작업 목록 시작', header_text)
 
         # 작업 하나를 등록한다
         inputbox = self.browser.find_element_by_id('id_new_item')
@@ -32,7 +37,7 @@ class NewVisitorTest(LiveServerTestCase):
         # "1: 밥 먹기" 항목이 보인다
         inputbox.send_keys(Keys.ENTER)
         edith_list_url = self.browser.current_url
-        self.assertRegex(edith_list_url, '/list/.+')
+        self.assertRegex(edith_list_url, '/lists/.+')
         self.check_for_row_in_list_table('1: 밥 먹기')
 
         # 다른 항목을 넣는다
@@ -71,7 +76,7 @@ class NewVisitorTest(LiveServerTestCase):
 
         # 프란시스가 전용 URL을 취득한다
         francis_list_url = self.browser.current_url
-        self.assertRegex(francis_list_url, '/list/.+')
+        self.assertRegex(francis_list_url, '/lists/.+')
         self.assertNotEqual(francis_list_url, edith_list_url)
 
         # 에디스가 입력한 흔적이 없음을 다시 확인한다
