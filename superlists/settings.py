@@ -128,7 +128,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, '../lists/static')
 
 # Extra places for collectstatic to find static files.
 STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'lists/static'),
+    os.path.abspath(os.path.join(BASE_DIR, '../lists/static')),
 )
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
