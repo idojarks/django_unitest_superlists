@@ -24,7 +24,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'yj-^_r1l#akv9fz6@!q8-30r0y%-ojn+$(5h6)1k$cz4v#&0cg'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -125,8 +125,6 @@ USE_TZ = True
 STATIC_URL = '/static/'
 #STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, '../static'))
 #STATIC_ROOT = os.path.join(BASE_DIR, '../lists/static')
-STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
