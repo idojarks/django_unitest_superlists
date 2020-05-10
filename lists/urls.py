@@ -23,6 +23,5 @@ from django.conf.urls.static import static
 urlpatterns = [
     #re_path(r'^lists/(\d+)/$', views.view_list, name='view_list'),
     path('<int:id>/', views.view_list, name='view_list'),
-    path('<int:id>/add_item', views.add_item, name='add_item'),
     path('new', views.new_list, name='new_list'),
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
