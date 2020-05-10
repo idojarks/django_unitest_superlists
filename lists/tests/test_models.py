@@ -36,3 +36,6 @@ class ListAndItemModelsTest(TestCase):
         item = Item(list=list_, text='')
         with self.assertRaises(ValidationError):
             item.save()
+
+            # 데이터의 유효성을 수동으로 검사
+            item.full_clean()
