@@ -39,3 +39,7 @@ class ListAndItemModelsTest(TestCase):
 
             # 데이터의 유효성을 수동으로 검사
             item.full_clean()
+
+    def test_get_absolute_url(self):
+        list_ = List.objects.create()
+        self.assertEqual(list_.get_absolute_url(), '/lists/%d/'%list_.id)
