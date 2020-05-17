@@ -2,10 +2,12 @@ from .base import FunctionalTest
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
+from unittest import skip
 
    
 class NewVisitorTest(FunctionalTest):
 
+    @skip
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 새로운 온라인 앱이 나왔다는 소식을 듣고
         # 그 앱을 확인하러 간다
@@ -17,7 +19,7 @@ class NewVisitorTest(FunctionalTest):
         self.assertIn('작업 목록 시작', header_text)
 
         # 작업 하나를 등록한다
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertEqual(inputbox.get_attribute('placeholder'), '작업 아이템 입력')
 
         # 텍스트 박스에 "밥 먹기"라고 쓴다
@@ -31,7 +33,7 @@ class NewVisitorTest(FunctionalTest):
         self.check_for_row_in_list_table('1: 밥 먹기')
 
         # 다른 항목을 넣는다
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('이빨 닦기')
         inputbox.send_keys(Keys.ENTER)
 
@@ -60,7 +62,7 @@ class NewVisitorTest(FunctionalTest):
 
         # 프란시스가 새로운 작업 아이템을 입력하기 시작한다
         # 그는 에디스보다 재미가 없다
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         inputbox.send_keys('우유 사기')
         inputbox.send_keys(Keys.ENTER)
 
@@ -82,7 +84,7 @@ class NewVisitorTest(FunctionalTest):
         self.browser.set_window_size(1024, 768)
 
         # 그녀는 입력 상자가 가운데 배치됐음을 본다
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
@@ -92,7 +94,7 @@ class NewVisitorTest(FunctionalTest):
         # 그녀는 새로운 리스트를 시작하고
         # 입력 상자가 가운데 배치됐음을 확인한다
         inputbox.send_keys('testing\n')
-        inputbox = self.browser.find_element_by_id('id_new_item')
+        inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
             512,
