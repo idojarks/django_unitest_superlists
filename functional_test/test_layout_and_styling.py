@@ -3,7 +3,6 @@ from unittest import skip
 
 class LayoutAndStylingTest(FunctionalTest):
 
-    @skip
     def test_layout_and_styling(self):
         # 에디스는 메인 페이지를 방문한다
         self.browser.get(self.server_url)
@@ -26,8 +25,6 @@ class LayoutAndStylingTest(FunctionalTest):
             512,
             delta=10
         )
-
-
 
     @skip
     def test_cannot_add_empty_list_items(self):

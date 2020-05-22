@@ -7,7 +7,6 @@ from unittest import skip
    
 class NewVisitorTest(FunctionalTest):
 
-    @skip
     def test_can_start_a_list_and_retrieve_it_later(self):
         # 새로운 온라인 앱이 나왔다는 소식을 듣고
         # 그 앱을 확인하러 간다
