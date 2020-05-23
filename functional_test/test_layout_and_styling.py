@@ -26,6 +26,5 @@ class LayoutAndStylingTest(FunctionalTest):
             delta=10
         )
 
-    @skip
     def test_cannot_add_empty_list_items(self):
         pass

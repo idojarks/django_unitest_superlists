@@ -1,5 +1,6 @@
 from .base import FunctionalTest
 from selenium.webdriver.common.by import By
+from lists.forms import DUPLICATE_ITEM_ERROR
 
 class ItemValidationTest(FunctionalTest):
 
@@ -42,4 +43,4 @@ class ItemValidationTest(FunctionalTest):
         # 에러 메시지를 본다.
         self.check_for_row_in_list_table('1: 콜라 사기')
         error = self.get_error_element()
-        self.assertEqual(error.text, "이미 등록한 작업입니다")
+        self.assertEqual(error.text, DUPLICATE_ITEM_ERROR)
