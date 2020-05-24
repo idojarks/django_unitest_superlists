@@ -44,3 +44,10 @@ class ItemValidationTest(FunctionalTest):
         self.check_for_row_in_list_table('1: 콜라 사기')
         error = self.get_error_element()
         self.assertEqual(error.text, DUPLICATE_ITEM_ERROR)
+
+    def test_error_messages_are_cleared_on_input(self):
+        # 에디스는 검증 에러를 발생시키도록 신규 목록을 시작한다
+        self.browser.get(self.server_url)
+        self.get_item_input_box().send_keys('\n')
+        #error = self.get_error_element()
+        #self.assertTrue(error.is_displayed())
