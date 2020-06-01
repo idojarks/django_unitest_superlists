@@ -1,5 +1,6 @@
 from .base import FunctionalTest
 from unittest import skip
+import time
 
 class LayoutAndStylingTest(FunctionalTest):
 
@@ -19,6 +20,7 @@ class LayoutAndStylingTest(FunctionalTest):
         # 그녀는 새로운 리스트를 시작하고
         # 입력 상자가 가운데 배치됐음을 확인한다
         inputbox.send_keys('testing\n')
+        
         inputbox = self.get_item_input_box()
         self.assertAlmostEqual(
             inputbox.location['x'] + inputbox.size['width'] / 2,
