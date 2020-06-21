@@ -34,6 +34,9 @@ def new_list(request):
         form.save(list_)
         return redirect(list_)
     else:
-        return render(request, 'home.html', {'form':form})
+        return render(request, 'home.html', 
+            {
+                'form':form,
+            })
 
     

@@ -41,4 +41,42 @@ class FunctionalTest(StaticLiveServerTestCase):
         return self.browser.find_element_by_id('id_text')
 
     def get_error_element(self):
-        return self.browser.find_element_by_css_selector('.has-error')
+        return self.browser.find_element_by_id('id_err_text')
+        #return self.browser.find_element_by_css_selector('.has-error')
+
+    def is_inputbox_valid(self):
+        inputbox = self.get_item_input_box()
+
+        validation_message = inputbox.get_attribute("validationMessage")
+        if validation_message == None:
+            return False
+
+        # 브라우저가 폼 유효성 검사 기능을 제공하는지 확인
+        script = "return Modernizr.formvalidation"
+
+        # 아래 코드는 동작하지 않는다
+        # self.browser.execute_script(script) == None 
+        # Modernizr 공부가 필요하다
+        if self.browser.execute_script(script) == False:
+            script = "return arguments[0].willValidate;"
+            if self.browser.execute_script(script, inputbox) == True and \
+                inputbox.get_attribute('textContent') == '':
+                return False
+
+        '''
+        validity
+        {
+            badInput: false,
+            customError: false,
+            patternMismatch: false,
+            rangeOverflow: false,
+            rangeUnderflow: false,
+            stepMismatch: false,
+            tooLong: false,
+            typeMismatch: false,
+            valid: false,
+            valueMissing: true
+        }
+        '''
+        script = "return arguments[0].validity.valid;"
+        return self.browser.execute_script(script, inputbox)

@@ -1,3 +1,7 @@
 #id_text {
     margin-top: 3ex;
 }
+
+.form-group.has-error {
+    display: block;
+}

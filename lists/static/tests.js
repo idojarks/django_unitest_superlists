@@ -10,4 +10,3 @@ QUnit.test("키를 입력할 때 에러가 숨겨져야 한다", function(assert
 QUnit.test("키 입력이 없으면 에러가 나온다", function(assert) {
     assert.equal($('.has-error').is(':visible'), true)
 })
-

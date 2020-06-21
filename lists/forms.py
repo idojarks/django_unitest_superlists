@@ -35,9 +35,7 @@ class ExistingListItemForm(ItemForm):
             self.instance.validate_unique()
         except ValidationError as e:
             e.error_dict = {'text': [DUPLICATE_ITEM_ERROR]}
-            #print(self.errors)
             self._update_errors(e)
-            #print(self.errors)
 
     def save(self):
         return forms.models.ModelForm.save(self)

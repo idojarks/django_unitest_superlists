@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width">
+  <title>QUnit Example</title>
+  <link rel="stylesheet" href="https://code.jquery.com/qunit/qunit-2.10.0.css">
+  
+</head>
+<body>
+  <div id="qunit"></div>
+  <div id="qunit-fixture">
+    <a id="id_login">login</a>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+  <script src="https://code.jquery.com/qunit/qunit-2.10.0.js"></script>
+  <script src="../accounts.js"></script>
+  <script src="../../../superlists/static/tests/sinon.js"></script>
+  
+  <script>
+      QUnit.test("initialize", function(assert) {
+          var requestWasCalled = false
+          var mockRequestFunction = function() {
+              requestWasCalled = true
+          }
+          var mockNavigator = {
+              id: {
+                  request: mockRequestFunction,
+                  watch: function() {},
+              }
+          }
+          Superlists.Accounts.initialize(mockNavigator)
+          
+          $('#id_login').trigger('click')
+          assert.equal(requestWasCalled, true)
+      })
+
+      // 이 변수들은 global로 선언해야 requests에 요청 정보가 들어감
+      // this로 선언하면 안됨
+    var xhr, requests, server
+
+    QUnit.module('navigator.id.watch test', {
+        beforeEach: function(assert) {
+            this.user = 'yong'
+            this.urls = {
+                login: '/accounts/google/login/',
+                logout: '/accounts/logout'
+            }
+            this.mockNavigator = {
+                id: {
+                    watch: sinon.mock(),
+                    redirectHome: sinon.mock(),
+                }
+            }
+            server = null
+            xhr = sinon.useFakeXMLHttpRequest()
+            requests = []
+            xhr.onCreate = function(req) {
+                requests.push(req)
+            }
+        },
+        afterEach: function() {
+            this.mockNavigator.id.watch.reset()
+            xhr.restore()
+            sinon.restore()
+
+            if (server != null) {
+                server.restore()
+                server = null
+            }
+        }
+    })
+
+    QUnit.test("navigator.id.watch", function(assert) {
+        Superlists.Accounts.initialize(this.mockNavigator, this.user, this.token, this.urls)
+        assert.equal(this.mockNavigator.id.watch.calledOnce, true)
+    })
+
+    QUnit.test("사용자 확인", function(assert) {
+        Superlists.Accounts.initialize(this.mockNavigator, this.user)
+        var watchCallArgs = this.mockNavigator.id.watch.firstCall.args[0]
+        assert.equal(watchCallArgs.loggedInUser, this.user, '사용자 확인')
+    })
+
+    QUnit.test('onlogin이 로그인 url을 ajax post함', function(assert) {
+        Superlists.Accounts.initialize(this.mockNavigator, this.user, this.token, this.urls)
+        var onloginCallback = this.mockNavigator.id.watch.firstCall.args[0].onlogin
+        onloginCallback()
+        assert.equal(requests.length, 1, 'ajax 요청 확인')
+        assert.equal(requests[0].method, 'POST')
+        assert.equal(requests[0].url, this.urls.login, 'url 확인')
+    })
+
+    QUnit.test('login 실패하면 logout 실행', function(assert) {
+        this.mockNavigator.id.logout = sinon.mock()
+        Superlists.Accounts.initialize(this.mockNavigator, this.user, this.token, this.urls)
+
+        server = sinon.fakeServer.create()
+        //server.respondWith([404, {}, '접속 거부'])
+
+        var onloginCallback = this.mockNavigator.id.watch.firstCall.args[0].onlogin
+        onloginCallback()
+        assert.equal(this.mockNavigator.id.logout.called, false)
+
+        //server.respond()
+        
+        server.requests[0].respond(
+            400, 
+            {}, 
+            '접속 거부'
+        )
+        assert.equal(this.mockNavigator.id.logout.called, true)
+    })
+
+    QUnit.test('json 정보 받기', function(assert) {
+        server = sinon.fakeServer.create()
+
+        callback = sinon.fake();
+        reqSomething('/somewhere/over/the/rainbow', 'POST', callback)
+
+        jsonData = JSON.stringify({ id: 1, text: "Provide examples", done: true })
+
+        server.requests[0].respond(
+            200, 
+            { "Content-Type": "application/json" },
+            jsonData
+        )
+        assert.equal(callback.calledWith(jsonData), true)
+    })
+
+    QUnit.test('GET request를 fake로 교체', function(assert) {
+        sinon.replace(jQuery, 'ajax', sinon.fake())
+
+        callback = sinon.fake();
+        url = '/somewhere/over/the/rainbow'
+        reqSomething(url, 'GET', callback)
+
+        assert.equal(jQuery.ajax.calledWithMatch({url:url}), true)
+    })
+
+    QUnit.test('GET / POST 구분', function(assert) {
+        url = '/somewhere/over/the/rainbow'
+        
+        reqSomething(url, 'POST')
+
+        assert.equal(requests.length, 1)
+        assert.equal(requests[0].method, 'POST')
+
+        reqSomething(url, 'GET')
+
+        assert.equal(requests.length, 2)
+        assert.equal(requests[1].method, 'GET')
+    })
+
+    function reqSomething(url, method, callback, cb400) {
+        /*
+        $.post(url)
+            .fail(function() {
+            })
+            .done(function(data) {
+                callback(JSON.stringify(data))
+            })
+        */
+        jQuery.ajax({
+            url: url,
+            method: method,
+            statusCode: {
+                200: function() {
+                    console.log('statusCode: 200');
+                },
+                400: function() {
+                    if (cb400 != null) {
+                        cb400()
+                    }
+                }
+            },
+            success: function(data) {
+                if (callback != null) {
+                    callback(JSON.stringify(data))
+                }
+            }
+        })
+    }
+  </script>
+
+    
+</body>
+</html>
