@@ -1,17 +1,12 @@
 from .base import FunctionalTest
 import time
+from unittest import skip
 
 class LoginTest(FunctionalTest):
 
-    def test_login_with_google(self):
-        res = self.browser.get(self.server_url)
-        print('response: ',res)
-        
-        self.browser.find_element_by_id('id_register').click()
-        #time.sleep(1000)
-        
-        #self.wait_for_element_with_id('id_logout')
-        #self.switch_to_new_window('To-Do')
+    def test_sign_up_with_google(self):
+        self.browser.get(self.server_url)
+        self.browser.find_element_by_id('id_signup').click()
 
         username = 'idojarks'
 
@@ -23,3 +18,7 @@ class LoginTest(FunctionalTest):
 
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertIn(username, navbar.text)
+
+        time.sleep(1000)
+
+   
