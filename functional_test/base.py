@@ -5,6 +5,7 @@ from selenium.webdriver.common.keys import Keys
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 import sys
 from unittest import skip
+from selenium.webdriver.support.ui import WebDriverWait
 
 class FunctionalTest(StaticLiveServerTestCase):
    
@@ -80,3 +81,18 @@ class FunctionalTest(StaticLiveServerTestCase):
         '''
         script = "return arguments[0].validity.valid;"
         return self.browser.execute_script(script, inputbox)
+
+    def wait_for_element_with_id(self, element_id):
+        WebDriverWait(self.browser, timeout=3).until(
+                lambda b: b.find_element_by_id(element_id)
+            )
+
+    def wait_to_be_logged_in(self, email):
+        self.wait_for_element_with_id('id_logout')
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertIn(email, navbar.text)
+
+    def wait_to_be_logged_out(self, email):
+        self.wait_for_element_with_id('id_login')
+        navbar = self.browser.find_element_by_css_selector('.navbar')
+        self.assertNotIn(email, navbar.text)

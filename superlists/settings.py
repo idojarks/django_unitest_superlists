@@ -152,9 +152,10 @@ SITE_ID = 1
 LOGIN_REDIRECT_URL = '/'
 
 
-'''
+
 AUTH_USER_MODEL = 'accounts_custom.User'
 
+'''
 AUTHENTICATION_BACKENDS = ( 
     'accounts_custom.authentication.CustomAuthenticationBackend',
 )
