@@ -22,5 +22,5 @@ urlpatterns = [
     path('', views.home_page, name='home'),
     path('lists/', include('lists.urls')),
     path('accounts/', include('allauth.urls')),
-    path('accounts_custom/', include('accounts_custom.urls')),
+    path('accounts2/', include('accounts2.urls')),
 ]

@@ -39,7 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'lists',
-    'accounts_custom',
+    'accounts2',
     'django.contrib.sites',
     'allauth', 
     'allauth.account', 
@@ -153,10 +153,10 @@ LOGIN_REDIRECT_URL = '/'
 
 
 
-AUTH_USER_MODEL = 'accounts_custom.User'
+#AUTH_USER_MODEL = 'accounts2.User'
 
 '''
 AUTHENTICATION_BACKENDS = ( 
-    'accounts_custom.authentication.CustomAuthenticationBackend',
+    'accounts2.authentication.CustomAuthenticationBackend',
 )
 '''

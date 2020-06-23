@@ -1,12 +1,12 @@
 from django.test import TestCase
-from accounts_custom.authentication import CustomAuthenticationBackend, VERIFY_URL
+from accounts2.authentication import CustomAuthenticationBackend, VERIFY_URL
 from unittest.mock import patch
 from django.contrib.auth import get_user_model
 
 USER_EMAIL = 'idojarks@gmail.com'
 User = get_user_model()
 
-@patch('accounts_custom.authentication.requests.post')
+@patch('accounts2.authentication.requests.post')
 class AuthenticateTest(TestCase):
 
     def setUp(self):
