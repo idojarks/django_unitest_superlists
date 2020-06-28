@@ -37,6 +37,9 @@
                 <a class="navbar-brand" href="/">Superlists</a>
 
                 {% if user.is_authenticated %}
+                <ul class="nav navbar-nav">
+                    <li><a href="{%url 'my_lists' user.email%}">나의 목록</a></li>
+                </ul>
                 <a class="navbar-right" >환영합니다, {{user.email}}</a>
                 
                 <a class="btn navbar-btn navbar-right" id="id_logout" href="/accounts/logout">logout</a> 
@@ -51,6 +54,9 @@
                 <div class="col-md-12 col-md-offset-3 jumbotron">
                     <div class="text-center">
                         <h1>{%block header_text%}{%endblock%}</h1>
+
+                        {%block list_form%}
+
                         <form method="POST" action="{%block form_action%}{%endblock%}">
                             {{form.text}}
                             {% csrf_token %}
@@ -72,6 +78,12 @@
             <div class="row">
                 <div class="col-md-12 col-md-offset-3">
                     {%block table%}
+                    {%endblock%}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6 col-md-offset-3">
+                    {%block extra_content%}
                     {%endblock%}
                 </div>
             </div>

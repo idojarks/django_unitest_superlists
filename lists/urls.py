@@ -24,4 +24,5 @@ urlpatterns = [
     #re_path(r'^lists/(\d+)/$', views.view_list, name='view_list'),
     path('<int:id>/', views.view_list, name='view_list'),
     path('new', views.new_list, name='new_list'),
+    path('users/<email>/', views.my_lists, name='my_lists'),
 ] #+ static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
