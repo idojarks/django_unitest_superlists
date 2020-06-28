@@ -153,7 +153,7 @@ LOGIN_REDIRECT_URL = '/'
 
 
 
-#AUTH_USER_MODEL = 'accounts2.User'
+AUTH_USER_MODEL = 'accounts2.User'
 
 '''
 AUTHENTICATION_BACKENDS = ( 
