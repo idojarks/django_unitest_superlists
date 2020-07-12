@@ -45,6 +45,6 @@ class MyListsTest(FunctionalTest):
         self.browser.find_element_by_link_text('게임하기').click()
         self.assertEqual(self.browser.current_url, second_list_url)
 
-        self.browser.find_elements_by_id('id_logout').click()
+        self.browser.find_element_by_id('id_logout').click()
         self.assertEqual(self.browser.find_elements_by_link_text('나의 목록'), [])
 
