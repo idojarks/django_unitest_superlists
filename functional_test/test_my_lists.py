@@ -1,3 +1,4 @@
+from selenium.webdriver.support.wait import WebDriverWait
 from .base import FunctionalTest
 from django.contrib.auth import get_user_model, SESSION_KEY, BACKEND_SESSION_KEY
 from django.contrib.sessions.backends.db import SessionStore
@@ -33,18 +34,30 @@ class MyListsTest(FunctionalTest):
         first_list_url = self.browser.current_url
 
         self.browser.find_element_by_link_text('나의 목록').click()
+        job1 = WebDriverWait(self.browser, 10).until(
+            lambda b : b.find_element_by_link_text('job 1'))
 
-        self.browser.find_element_by_link_text('job 1').click()
-        self.assertEqual(self.browser.current_url, first_list_url)
+        job1.click()
+
+        self.wait_for(
+            lambda : self.assertEqual(self.browser.current_url, first_list_url)
+            )
 
         self.browser.get(self.server_url)
         self.get_item_input_box().send_keys('게임하기\n')
         second_list_url = self.browser.current_url
 
-        self.browser.find_element_by_link_text('나의 목록').click()
-        self.browser.find_element_by_link_text('게임하기').click()
+        myList = WebDriverWait(self.browser, 3).until(
+            lambda b : b.find_element_by_link_text('나의 목록'))
+        myList.click()
+
+        myGame = WebDriverWait(self.browser, 3).until(
+            lambda b : b.find_element_by_link_text('게임하기'))
+        myGame.click()
         self.assertEqual(self.browser.current_url, second_list_url)
 
-        self.browser.find_element_by_id('id_logout').click()
+        logout = WebDriverWait(self.browser, 3).until(
+            lambda b : b.find_element_by_id('id_logout'))
+        logout.click()
         self.assertEqual(self.browser.find_elements_by_link_text('나의 목록'), [])
 

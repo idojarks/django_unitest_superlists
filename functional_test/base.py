@@ -1,3 +1,4 @@
+from time import time
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.keys import Keys
@@ -8,6 +9,7 @@ from unittest import skip
 from selenium.webdriver.support.ui import WebDriverWait
 import os
 from datetime import datetime
+from selenium.common.exceptions import WebDriverException
 
 SCREEN_DUMP_LOCATION = os.path.abspath(
     os.path.join(os.path.dirname(__file__), 'screendumps')
@@ -49,7 +51,7 @@ class FunctionalTest(StaticLiveServerTestCase):
 
         #self.browser.refresh()
         self.browser.quit()
-        super.tearDown()
+        super().tearDown()
 
     def _test_has_failed(self):
         for method, error in self._outcome.errors:
@@ -141,3 +143,12 @@ class FunctionalTest(StaticLiveServerTestCase):
         self.wait_for_element_with_id('id_login')
         navbar = self.browser.find_element_by_css_selector('.navbar')
         self.assertNotIn(email, navbar.text)
+
+    def wait_for(self, function_with_assertion, timeout=3):
+        start_time = time()
+        while time() - start_time < timeout:
+            try:
+                return function_with_assertion()
+            except (AssertionError, WebDriverException):
+                time.sleep(0.1)
+        return function_with_assertion()
