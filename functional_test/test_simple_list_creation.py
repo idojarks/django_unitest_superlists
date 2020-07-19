@@ -38,12 +38,12 @@ class NewVisitorTest(FunctionalTest):
 
         table = self.browser.find_element_by_id('id_list_table')
         rows = table.find_elements_by_tag_name('tr')
-        self.assertIn('1: 밥 먹기', [row.text for row in rows])
-        self.assertIn('2: 이빨 닦기', [row.text for row in rows])
+        self.wait_for(lambda : self.assertIn('1: 밥 먹기', [row.text for row in rows]))
+        self.wait_for(lambda : self.assertIn('2: 이빨 닦기', [row.text for row in rows]))
         
         # 페이지를 다시 갱신하고, 두 개 아이템이 목록에 보인다.
-        self.check_for_row_in_list_table('2: 이빨 닦기')
-        self.check_for_row_in_list_table('1: 밥 먹기')
+        #self.check_for_row_in_list_table('2: 이빨 닦기')
+        #self.check_for_row_in_list_table('1: 밥 먹기')
 
         # 새로운 사용자인 프란시스가 사이트에 접속한다.
         
